@@ -1,42 +1,37 @@
-{% extends 'accounts/base.html' %}
-
-{% block block %}   
-
+{% extends 'accounts/base.html' %} {% block block %} 
 {% include 'accounts/status.html' %}
-<br>
+<br />
 <div class="row d-flex justify-content-between">
-    <div class="col-md-4 ml-4">
-        <h5>Customers</h5>
-        <hr>
-        <div class="card card-body ">
-            <a class="btn btn-primary btn-sm btn-block" href="">Create Customer
-            </a>
-            <table class="table table-sm">
-                <tr>
-                    <th></th>
-                    <th>Customer</th>
-                    <th>Orders</th>
-                </tr>
-            </table>
-        </div>
+  <div class="col-md-4 ml-4">
+    <h5>Customers</h5>
+    <hr />
+    <div class="card card-body">
+      <a class="btn btn-primary btn-sm btn-block" href="">Create Customer </a>
+      <table class="table table-sm">
+        <tr>
+          <th></th>
+          <th>Customer</th>
+          <th>Orders</th>
+        </tr>
+      </table>
     </div>
-    
-    <div class="col-md-7 mr-4">
-        <h5>Last 5 Orders</h5>
-        <hr>
-        <div class="card card-body">
-            <a class="btn btn-primary btn-sm btn-block" href="">Create Order</a>
-            <table class="table table-sm">
-                <tr>
-                    <th>Product</th>
-                    <th>Date Ordered</th>
-                    <th>Status</th>
-                    <th>Update</th>
-                    <th>Remove</th>
-                </tr>
-            </table>
-        </div>
-    </div>
-</div>
-{% endblock %} 
+  </div>
 
+  <div class="col-md-7 mr-4">
+    <h5>Last 5 Orders</h5>
+    <hr />
+    <div class="card card-body">
+      <a class="btn btn-primary btn-sm btn-block" href="">Create Order</a>
+      <table class="table table-sm">
+        <tr>
+          <th>Product</th>
+          <th>Date Ordered</th>
+          <th>Status</th>
+          <th>Update</th>
+          <th>Remove</th>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
