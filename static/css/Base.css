@@ -4,7 +4,9 @@
     height: 64px;
 }
 
-body{
+body{   
+    height: 100%;
+    margin: 0;
     background-color: #ebeff5;
 }
 
