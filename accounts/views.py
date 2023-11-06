@@ -8,27 +8,21 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 
 from .models import *
-from .forms import OrderForm, CustomerForm, UserCreationForm
+from .forms import OrderForm, CustomerForm, CreatUserForm
 from .filters import OrderFilter
 from.decorators import unauthenticated_user, allowed_users, admin_only
 
 @unauthenticated_user
 def registrationPage(request):
-    form = UserCreationForm()
+    form = CreatUserForm()
     
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CreatUserForm(request.POST)
         print(form.errors)
         if form.is_valid():
-            user = form.save()
+            form.save()
             username = form.cleaned_data.get('username')
             # Links a user with customer group when registration is performed
-            group = Group.objects.get(name='customer')
-            user.groups.add(group)
-            
-            Customer.objects.create(
-                user=user
-                )
             
             
             messages.success(request, 'Account created for ' + username)
@@ -89,8 +83,16 @@ def userPage(request):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['customer'])
 def accountSettings(request):
+    customer = request.user.customer
+    form = CustomerForm(instance=customer)
     
-    context = { }
+    if request.method == 'POST':
+        form = CustomerForm(request.POST, request.FILES, instance=customer)
+        if form.is_valid:
+            form.save()
+            
+    
+    context = { 'form': form}
     return render(request, 'accounts/account_settings.html', context)
 
 @login_required(login_url='login')
