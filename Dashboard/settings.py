@@ -12,26 +12,36 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from django.core.exceptions import ImproperlyConfigured
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Handles the error messages for any missing environment varibles
+def get_env_value(env_variable):
+    try:
+        return os.environ[env_variable]
+    except KeyError:
+        error_msg = 'Set the {} environment variable'.format(env_variable)
+        raise ImproperlyConfigured(error_msg)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 # Directory of navbar template at the base of the project folder
 #TEMP_DIR = os.path.join(BASE_DIR, 'templates')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%6=5y%&x3#aogyk@5j_!4!dc6i8^9%3(ij^dfdyon-9a_3gdz7'
+SECRET_KEY = get_env_value('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG =  get_env_value('DEBUG')
 
 ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'accounts',
     'django.contrib.admin',
@@ -40,8 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # 'accounts.apps.AccountsConfig',
+    'storages',
     
     'django_filters',
 ]
@@ -80,12 +89,31 @@ WSGI_APPLICATION = 'dashboard.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+'''
+1 - Download and install PostgreSQL & PG Admin
+2 - Login to PG admin & Create Database
+2 - Connect database to Django App & run migrations
+4 - Create database on AWS
+5 - Connect to live AWS Database with PG admin & Django
+'''
+#if DEBUG:
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# else:
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": get_env_value('DATABASE_ENGINE'),
+#             "NAME": get_env_value('DATABASE_NAME'),
+#             "USER": get_env_value('DATABASE_USER'),
+#             "PASSWORD": get_env_value('DATABASE_PASSWORD'),
+#             "HOST": get_env_value('DATABASE_HOST'),
+#             "PORT": get_env_value('DATABASE_PORT'),
+#         }
+#     }
 
 
 # Password validation
@@ -138,10 +166,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 # Simple Mail Transfer Protocol Configuration
+EMAIL_BACKEND = get_env_value('EMAIL_BACKEND')
+EMAIL_HOST = get_env_value('EMAIL_HOST')
+EMAIL_PORT = get_env_value('EMAIL_PORT')
+EMAIL_USE_TLS = get_env_value('EMAIL_USE_TLS')
+EMAIL_HOST_USER = get_env_value('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = get_env_value('EMAIL_HOST_PASSWORD')
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'kjglover4585@gmail.com'
-EMAIL_HOST_PASSWORD = ''
+#S3 Buckets config
+AWS_ACCESS_KEY_ID = get_env_value('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = get_env_value('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = get_env_value('AWS_STORAGE_BUCKET_NAME')
+
+AWS_S3_FILE_OVERWRITE = get_env_value('AWS_S3_FILE_OVERWRITE')
+AWS_DEFAULT_ACL = get_env_value('AWS_DEFAULT_ACL')
+
+#DEFAULT_FILE_STORAGE = get_env_value('DEFAULT_FILE_STORAGE')
+#STATICFILES_STORAGE = get_env_value('STATICFILES_STORAGE')

@@ -4,21 +4,18 @@
 <br>
 <div class="row">
     <div class="col-md">
-        <div class="card card-body">
-            <h5>Products</h5>
+        <div class="card card-body">           
+            <h5>Tags</h5>
+            <a class="btn btn-primary btn-sm btn-block" href="{% url 'create_tag' %}">Create Tag</a>
         </div>
         <div class="card card-body">
             <table class="table">
                 <tr>
-                    <th>Product</th>
-                    <th>Category</th>
-                    <th>Price</th>
+                    <th>Name</th>
                 </tr>
-                {% for i in products %}
+                {% for i in tags %}
                 <tr>
                    <td> {{i.name }} </td>
-                   <td> {{i.category }} </td>
-                   <td> {{i.price }} </td>
                 </tr> 
                 {% endfor %}
             </table>

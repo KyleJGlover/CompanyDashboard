@@ -1,0 +1,68 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% block block %} 
+
+<link rel="stylesheet" type="text/css" href="{% static '/css/product_form.css' %}">
+
+<div class="d-flex justify-content-center h-auto">
+    <form class="form-body" method="POST" action="{% url 'create_product' %}">
+        {% csrf_token %}                            
+            <div class="form-holder">
+                <div class="form-content">
+                    <div class="form-items">
+                        <h3>Create a Product</h3>
+                        <p>Fill in the data below.</p>
+                        {% for field in form %}
+                            <div class="form-group col-md-12">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text text-dark">{{field.label}}</div>
+                                    </div>
+                                {% if field.field.choices %}
+                                    <select class="custom-select" name={{field.name}} required> 
+                                        {% for value, label in field.field.choices %}
+                                        <option value="{{ value }}" default:{{ label }} selected>
+                                            {{ label }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                {% elif field.field.all %}
+                                    <select class="custom-select" name={{field.name}} required> 
+                                        {% for value, label in field.field.choices %}
+                                        <option value="{{ value }}" default:{{ label }} selected>
+                                            {{ label }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                {% elif field.label == 'Price' %}
+                                    <input class="form-control" type="number" name={{field.name}} placeholder="0.00" step=".01" required>
+                                {% else %}
+                                    <input class="form-control" type="text"  name={{field.name}} placeholder="" required>    
+                                {% endif %}
+                            </div>
+                                <div class="valid-feedback">{{field.label}} field is valid!</div>
+                                <div class="invalid-feedback">{{field.label}}  field cannot be blank!</div>
+                            </div>
+                        {% endfor %}             
+                        <div class="d-flex justify-content-center mt-3">
+                            <input class="btn btn-info" type="submit" value="Create Product">
+                        </div>
+                        {% if form.errors %}
+                            <div class="alert alert-danger" role="alert">{{form.errors}}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+    </form>
+</div>
+ <script>
+/* Because i didnt set placeholder values in forms.py they will be set here using vanilla Javascript
+//We start indexing at one because CSRF_token is considered and input field 
+*/
+
+for (var field in form){	
+form[field].className += ' form-control'
+}
+</script>
+            
+{% endblock %} 

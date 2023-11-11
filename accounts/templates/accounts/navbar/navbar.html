@@ -1,0 +1,55 @@
+{% load static %}
+
+<style>
+  .hello-msg{
+    font-size: 18px;
+    color: #fff;
+    margin-right:20px;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <img src="{% static 'images/logo.ico' %}" id="logo">
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarNav"
+    aria-controls="navbarNav"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+  <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav"> 
+      <li class="nav-item active"> 
+        <a class="nav-link">Admin Tracker</a>
+      </li>
+      {% if request.user.is_authenticated %}      
+        <li class="nav-item active"> 
+          <a class="btn btn-md  btn-light mr-2 ml-2" href="{% url 'home' %}" >Dashboard <span class="sr-only">(current)</span></a>
+        </li>
+          
+          {% if request.user.customer.group == 'admin' %}
+            <li class="nav-item active">
+              <a class="btn btn-md  btn-light mr-2" href="{% url 'products' %}">Products</a>
+            </li>
+            <li class="nav-item active">
+              <a class="btn btn-md  btn-light mr-2" href="{% url 'tags' %}">Tags</a>
+            </li>
+          {% else %}
+            <li class="nav-item active">
+              <a class="btn btn-md  btn-light mr-2" href="{% url 'account' %}">Settings</a>
+            </li>
+          {% endif %}
+        {% endif %}
+
+    </ul>
+  </div>
+
+  {% if request.user.is_authenticated %}      
+    <span class="hello-msg"> Hello, {{request.user}}</span>
+    <span><a class="btn btn-md  btn-warning" href="{% url 'logout' %}">Logout</a></span>
+  {% endif %}
+</nav>

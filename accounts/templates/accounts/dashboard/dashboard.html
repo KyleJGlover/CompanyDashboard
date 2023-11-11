@@ -1,13 +1,13 @@
 {% extends 'accounts/base.html' %} 
 {% block block %} 
-{% include 'accounts/status.html' %}
+{% include 'accounts/dashboard/status.html' %}
 <br />
 <div class="row d-flex justify-content-between">
   <div class="col-md-4 ml-4">
     <h5>Customers</h5>
     <hr />
     <div class="card card-body">
-      <a class="btn btn-primary btn-sm btn-block" href="">Create Customer </a>
+      <a class="btn btn-primary btn-sm btn-block" href="{% url 'account' %}">Create Customer </a>
       <table class="table table-sm">
         <tr>
           <th></th>
