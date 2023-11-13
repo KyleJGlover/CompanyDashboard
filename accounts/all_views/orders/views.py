@@ -22,12 +22,14 @@ def createOrder(request, pk):
         
     context = {'formset': formset}
     
-    return render(request, 'accounts/order_form.html', context)
+    return render(request, 'accounts/orders/create.html', context)
 
 @allowed_users(allowed_roles=['admin'])
 @login_required(login_url='login')
 def updateOrder(request, pk):
     order = Order.objects.get(id=pk)
+    customers = Customer.objects.all().exclude(group=Customer.USER_ROLES['admin'])
+    print(customers)
     form = OrderForm(instance=order)
     if request.method == 'POST':       
         form = OrderForm(request.POST, instance=order)
@@ -35,9 +37,9 @@ def updateOrder(request, pk):
             form.save()
             return redirect('/')
         
-    context = {'form': form }
+    context = {'form': form, 'customers' : customers }
     
-    return render(request, 'accounts/order_form.html', context)
+    return render(request, 'accounts/orders/update.html', context)
 
 @allowed_users(allowed_roles=['admin'])
 @login_required(login_url='login')
@@ -49,4 +51,4 @@ def deleteOrder(request, pk):
         
     context = { 'item': order }
     
-    return render(request, 'accounts/delete.html', context)
+    return render(request, 'accounts/credentials/delete.html', context)

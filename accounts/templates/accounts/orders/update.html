@@ -1,0 +1,54 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% block block %} 
+
+<link rel="stylesheet" type="text/css" href="{% static '/css/order_form.css' %}">
+<form class="form-body" method="POST" action="">
+    {% csrf_token %}                            
+        <div class="form-holder">
+            <div class="form-content">
+                <div class="form-items">
+                    <h3>Update Order</h3>
+                    <p>Fill in the data below.</p>
+                    {% for field in form %}
+                        <div class="form-group col-md-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text text-dark">{{field.label}}</div>
+                                </div>
+                                <select class="custom-select text-dark" name={{field.name}} required> 
+                                    {% comment %} Had to limit the number of user to non admin must change model structure later {% endcomment %}
+                                    {% if field.label == 'Customer' %}
+                                        {% for customer in customers %}
+                                            <option value="{{ customer.name }}">
+                                                {{ customer.name }}
+                                            </option>
+                                        {% endfor %}
+
+                                    {% else %}
+                                        {% for value, label in field.field.choices %}
+                                            {% if label != '---------' %}
+                                                    <option value="{{ value }}">
+                                                        {{ label }}
+                                                    </option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+
+                                </select>
+                            </div>
+                            <div class="valid-feedback">{{field.label}} field is valid!</div>
+                            <div class="invalid-feedback">{{field.label}}  field cannot be blank!</div>
+                        </div>
+                    {% endfor %}             
+                    <div class="d-flex justify-content-center mt-3">
+                        <input class="btn btn-info" type="submit" value="Update Order">
+                    </div>
+                    {% if form.errors %}
+                        <div class="alert alert-danger" role="alert">{{form.errors}}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+</form>      
+{% endblock %} 

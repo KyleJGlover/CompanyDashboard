@@ -14,8 +14,9 @@ from accounts.decorators import allowed_users, admin_only
 @admin_only
 def home(request):
     orders = Order.objects.all()
-    customers = Customer.objects.all().exclude(name = request.user.username)
-    
+    # Remove admin accounts from the list of customers
+    customers = Customer.objects.all().exclude(group=Customer.USER_ROLES['admin'])
+    orders.order_by()
     total_customers = customers.count()
     total_orders = orders.count()
     
@@ -26,13 +27,6 @@ def home(request):
                'total_customers' : total_customers, 'total_orders' : total_orders,
                'delivered' : delivered, 'pending': pending }
     return render(request, 'accounts/dashboard/dashboard.html', context)
-
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
-def products(request):
-    products = Product.objects.all()
-    context = {'products': products }
-    return render(request, 'accounts/dashboard/products.html', context)
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])

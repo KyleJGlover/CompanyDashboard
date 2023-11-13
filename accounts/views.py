@@ -41,7 +41,6 @@ def accountSettings(request):
         if form.is_valid:
             form.save()
             
-    
     context = { 'form': form}
     return render(request, 'accounts/account_settings.html', context)
 
